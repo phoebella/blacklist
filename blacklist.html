@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <style>
+          table, th, td {
+            border: 1px solid black;
+            margin-left:auto;
+            margin-right:auto;
+            bgcolor="skyblue";
+          }
+          .btn{
+            background-color: skyblue; /* Blue background */
+            border: none; /* Remove borders */
+            color: white; /* White text */
+            padding: 6px 8px; /* Some padding */
+            font-size: 12px; /* Set a font size */
+            cursor: pointer; /* Mouse pointer on hover */
+
+          }
+          .table_header{
+              align: center;
+              font-size: 20px;
+              padding: 10px 150px;
+          }
+        </style>
+        <script src="blacklist.js"></script>
+    </head>
+    <body>
+      <table id="blacklist">
+        <th class="table_header">Blacklist</th>
+      </table>
+      <div id="state">
+        <input type="button" id="start" value="start"/>
+        <button class="btn" id="add"><i class="fa fa-plus"></i></button>
+        <button class ="btn" id="delete"><i class="fa fa-minus"></i></button>
+        <p><span>time left: </span></p>
+        <div id="time"></div>
+      </div>
+    </body>
+  </html>

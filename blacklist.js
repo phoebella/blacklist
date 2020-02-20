@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded',function (){
-  drawtable(false);
+  drawtable(false,delete_listener);
   add_listener();
 });
 
 
-function drawtable(last){
+function drawtable(last,callback){
   chrome.storage.sync.get('blacklist',function(data){
     let blacklist = data.blacklist;
     let row = document.getElementById('blacklist');
@@ -14,55 +14,98 @@ function drawtable(last){
     blacklist.forEach(function(item){
         if(item=="")return;
         let tr = row.insertRow();
-        tr.id = counter.toString();
+        tr.id = counter.toString()+"tr";
+        let td1 = tr.insertCell();
+        let td2 = tr.insertCell();
+        var btn = document.createElement('button');
+        btn.className = "delete";
+        btn.id = counter.toString();
+        btn.innerHTML = '<i class="fa fa-minus"></i>';
+        td1.innerHTML = item;
+        td2.appendChild(btn);
         counter++;
-        let td = tr.insertCell();
-        td.innerHTML = item;
         console.log("again");
       });
     }
 
       if(last==true){
-        let tr = row.insertRow();
-        let cur_row = row_num+1;
-        tr.id = cur_row.toString();
-        let td = tr.insertCell();
-        td.id = cur_row.toString()+"td";
-        td.innerHTML = "<input id =\"" + cur_row +   "input\">" + "</input>";
-        console.log("true "+ cur_row + "input");
-        set_cur_listener(cur_row);
-
+        var enter = prompt("Please enter the website you want to block:");
+        var url;
+        if (enter == null || enter == "") {
+            url = "";
+        } else {
+            url = enter;
+            add_url_to_table(url);
+        }
       }
+      if (callback === undefined){
+			    callback = function(){};
+		  }
+		  callback();
   });
 }
 
-function set_cur_listener(row_num){
-  document.getElementById(row_num+"input").addEventListener("keypress", function(event){
-		if(event.keyCode == 13){
-			console.log("enter keypressed "+row_num);
-      /*let table = document.getElementById('blacklist');
-      let tr = table.insertRow();
-      tr.id = row_num.toString();
-      let td = tr.insertCell();*/
-      let td = document.getElementById(row_num+"td");
-      td.innerHTML = this.value;
-      //table.deleteRow(row_num-1);
 
-      chrome.storage.sync.get('blacklist', function (data){
-        try{
-          let url = document.getElementById(row_num+"input").value;
-          data.blacklist.push(url);
-  			  chrome.storage.sync.set({'blacklist': data.blacklist}, function (){
-          console.log("url pushed "+url+ " row is " + row_num);
-  			});
-        }catch(err){
+function add_url_to_table(url){
+  chrome.storage.sync.get('blacklist', function (data){
+    try{
+      let myblacklist = document.getElementById('blacklist');
+      data.blacklist.push(url);
+      chrome.storage.sync.set({'blacklist': data.blacklist}, function (){
 
-          console.log("url doesn't exist err "+"row is " +row_num);
-        }
-		});
-		}
-	});
+        let tr = myblacklist.insertRow();
+        let cur_row = data.blacklist.length;
+        tr.id = cur_row.toString()+"tr";
+        let td = tr.insertCell();
+        td.id = cur_row.toString()+"td";
+        td.innerHTML = url;
+
+        let td2 = tr.insertCell();
+        var btn = document.createElement('button');
+        btn.className = "delete";
+        btn.id=cur_row.toString();
+        btn.innerHTML = '<i class="fa fa-minus"></i>';
+        td2.appendChild(btn);
+        //drawtable(true,delete_listener);
+
+    });
+    }catch(err){
+
+      console.log("url doesn't exist err "+"row is " +row_num);
+    }
+});
 }
+
+
+function delete_listener(){
+  let delete_buttons = document.getElementsByClassName("delete");
+  console.log("in delete_listener, len is "+delete_buttons.length);
+  for(i = 0;i<delete_buttons.length;++i){
+    console.log("btn id is " + delete_buttons[i].id[0]);
+    delete_buttons[i].addEventListener("click", function() {
+      let id = this.id[0];
+      chrome.storage.sync.get('blacklist', function (data){
+        let blacklist = data.blacklist;
+        blacklist.splice(id-1,1);
+        let row_id = id+"tr";
+        var row = document.getElementById(row_id);
+        try{
+          row.parentNode.removeChild(row);
+        }catch{
+          console.log("parent doens't exist");
+        }
+        //let myblacklist = document.getElementById('blacklist');
+        //myblacklist.deleteRow(id);
+        chrome.storage.sync.set({'blacklist': blacklist}, function (){
+					console.log(id + " has been removed from filter list");
+
+        });
+      });
+    });
+  }
+
+}
+
 
 
 
@@ -71,6 +114,6 @@ function add_listener(){
   let add = document.getElementById('add');
   add.addEventListener('click',function(){
     console.log("drawtable true");
-    drawtable(true);
+    drawtable(true,delete_listener);
   });
 }

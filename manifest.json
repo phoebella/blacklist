@@ -15,6 +15,9 @@
   "browser_action": {
     "default_icon": "images/lock16.png"
   },
+  "externally_connectable": {
+    "matches":["*://example.com/*"]
+  },
   "permissions": [
     "storage",
 	  "tabs",

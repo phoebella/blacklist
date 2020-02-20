@@ -3,39 +3,78 @@
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
-          table, th, td {
-            border: 1px solid black;
+          table,th,td {
+            border: 2px solid #75b79e;
             margin-left:auto;
             margin-right:auto;
-            bgcolor="skyblue";
+            border-radius: 15px;
+          }
+          body{
+            text-align: center;
           }
           .btn{
-            background-color: skyblue; /* Blue background */
+            background-color: #a7e9af; /* Blue background */
             border: none; /* Remove borders */
-            color: white; /* White text */
+            color: #6a8caf; /* White text */
             padding: 6px 8px; /* Some padding */
             font-size: 12px; /* Set a font size */
             cursor: pointer; /* Mouse pointer on hover */
+            align: center;
+
+          }
+          .delete{
+            background-color: #a7e9af; /* Blue background */
+            border: none; /* Remove borders */
+            color: #6a8caf; /* White text */
+            padding: 6px 8px; /* Some padding */
+            font-size: 12px; /* Set a font size */
+            cursor: pointer; /* Mouse pointer on hover */
+            align: center;
+            border-radius: 15px;
 
           }
           .table_header{
               align: center;
-              font-size: 20px;
-              padding: 10px 150px;
+              font-size: 30px;
+              padding: 15px 200px;
+              color: #6a8caf;
+              font-family: monospace;
           }
+           #container {
+             display: inline-block;
+             justify-content: center;
+             align-items: center;
+           }
+           #start{
+             display: inline-block;
+             vertical-align: bottom;
+             font-size: 12px;
+             font-family: monospace;
+             padding: 6px 8px;
+           }
+           #blacklist{
+             display: inline-table;
+           }
+           .vertical-line {
+             width: 1px;
+             height: 10px;
+           }
         </style>
         <script src="blacklist.js"></script>
     </head>
-    <body>
-      <table id="blacklist">
+    <body style="background-color:#eef9bf">
+      <div id="container">
+      <table id="blacklist" bordercolor="skyblue">
         <th class="table_header">Blacklist</th>
       </table>
+      <div class="vertical-line"></div>
       <div id="state">
-        <input type="button" id="start" value="start"/>
+        <input type="text" size="5" id="set_time" value="30">min
+        <button class="btn" id="start">start</button>
         <button class="btn" id="add"><i class="fa fa-plus"></i></button>
-        <button class ="btn" id="delete"><i class="fa fa-minus"></i></button>
         <p><span>time left: </span></p>
         <div id="time"></div>
       </div>
+    </div>
     </body>
   </html>

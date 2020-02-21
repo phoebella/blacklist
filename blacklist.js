@@ -1,6 +1,9 @@
+
+
 document.addEventListener('DOMContentLoaded',function (){
   drawtable(false,delete_listener);
   add_listener();
+  time_listener();
 });
 
 
@@ -66,11 +69,9 @@ function add_url_to_table(url){
         btn.id=cur_row.toString();
         btn.innerHTML = '<i class="fa fa-minus"></i>';
         td2.appendChild(btn);
-        //drawtable(true,delete_listener);
-
+        delete_listener();
     });
     }catch(err){
-
       console.log("url doesn't exist err "+"row is " +row_num);
     }
 });
@@ -94,8 +95,6 @@ function delete_listener(){
         }catch{
           console.log("parent doens't exist");
         }
-        //let myblacklist = document.getElementById('blacklist');
-        //myblacklist.deleteRow(id);
         chrome.storage.sync.set({'blacklist': blacklist}, function (){
 					console.log(id + " has been removed from filter list");
 
@@ -107,13 +106,111 @@ function delete_listener(){
 }
 
 
-
-
-
 function add_listener(){
   let add = document.getElementById('add');
   add.addEventListener('click',function(){
     console.log("drawtable true");
     drawtable(true,delete_listener);
+  });
+}
+
+
+function time_listener(){
+  let start_btn = document.getElementById('start');
+  let text = document.getElementById('set_time');
+  chrome.storage.sync.get('time_setting', function (data) {
+    if(data.time_setting.timeon){
+      start_btn.disabled = true;
+      text.disabled = true;
+    } else {
+      console.log("text in focus")
+      text.focus();
+      text.select();
+    }
+  });
+  text.addEventListener("keyup",function(event){
+    event.preventDefault();
+    //alert('keycode is ' + event.keyCode);
+    if(event.keyCode==13){
+      turn_timer_on();
+    }
+
+  });
+  start_btn.addEventListener('click',turn_timer_on);
+  write_timer();
+}
+
+
+
+function turn_timer_on(){
+  var today = new Date().getTime();
+  let time_setting = {}
+  chrome.storage.sync.get('time_setting', function (data) {
+      var current_milli = Date.now();
+      var value_milli = document.getElementById('set_time').value*60000;
+      var block_time = current_milli+value_milli;
+      time_setting={blocktime:block_time,timeon:true};
+      chrome.storage.sync.set({'time_setting': time_setting}, function(){
+        write_timer();
+      });
+  });
+
+  //console.log("today is " + today);
+
+}
+
+var update;
+
+function write_timer(){
+  chrome.storage.sync.get('time_setting', function (data) {
+    console.log("in writer");
+    console.log(data.time_setting.timeon);
+    if(data.time_setting.timeon==true){
+      let start_btn = document.getElementById('start');
+      let text = document.getElementById('set_time');
+      start_btn.disabled = true;
+      text.disabled = true;
+    }
+    update = setInterval(update_time,1000);
+  });
+}
+
+
+function update_time(){
+  chrome.storage.sync.get('time_setting', function (data) {
+    let cur_time = new Date().getTime();
+    let time_left = data.time_setting.blocktime-cur_time;
+    if(time_left>0){
+      let hours = Math.floor((time_left / (1000 * 60 * 60)) % 24);
+      let minutes = Math.floor((time_left / (1000 * 60)) % 60);
+      let seconds = Math.floor((time_left / 1000) % 60);
+      let alarm = document.createElement('button');
+      alarm.className = "pass";
+      alarm.innerHTML = '<i class="fas fa-clock"></i>';
+      document.getElementById("num_display").innerHTML =  hours + " h " + minutes
+      + " m " + seconds + " s ";
+      document.getElementById("num_display").appendChild(alarm);
+
+    } else {
+      console.log("time_left<0");
+      clearInterval(update);
+      let btn = document.createElement('button');
+      btn.className = "pass";
+      btn.innerHTML = '<i class="fa fa-check-circle"></i>';
+      document.getElementById("num_display").innerHTML = " time's up, all sites unblocked";
+      document.getElementById("num_display").appendChild(btn);
+      //document.getElementById("num_display").style.color= "#6a8caf";
+
+
+
+
+
+      let start_btn = document.getElementById('start');
+      let text = document.getElementById('set_time');
+      start_btn.disabled = false;
+      text.disabled = false;
+      let time_setting={blocktime:0,timeon:false};
+      chrome.storage.sync.set({'time_setting': time_setting});
+    }
   });
 }

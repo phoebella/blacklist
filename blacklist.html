@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <style>
           table,th,td {
             border: 2px solid #75b79e;
@@ -21,6 +22,15 @@
             cursor: pointer; /* Mouse pointer on hover */
             align: center;
 
+          }
+          .pass{
+            background-color: #eef9bf;
+            border: none; /* Remove borders */
+            color: #21bf73; /* White text */
+            padding-bottom: 5px; /* Some padding */
+            font-size: 18px; /* Set a font size */
+            cursor: pointer; /* Mouse pointer on hover */
+            align: center;
           }
           .delete{
             background-color: #a7e9af; /* Blue background */
@@ -48,9 +58,9 @@
            #start{
              display: inline-block;
              vertical-align: bottom;
-             font-size: 12px;
+             font-size: 15px;
              font-family: monospace;
-             padding: 6px 8px;
+             padding: 5px 4px;
            }
            #blacklist{
              display: inline-table;
@@ -58,6 +68,10 @@
            .vertical-line {
              width: 1px;
              height: 10px;
+           }
+           .wraptext{
+             display: flex;
+             align-items: center;
            }
         </style>
         <script src="blacklist.js"></script>
@@ -72,7 +86,10 @@
         <input type="text" size="5" id="set_time" value="30">min
         <button class="btn" id="start">start</button>
         <button class="btn" id="add"><i class="fa fa-plus"></i></button>
-        <p><span>time left: </span></p>
+        <div class ="wraptext">
+          <p style="font-weight:bold; color: #6a8caf" >time left: </p>
+          <p  id = "num_display"></p>
+        </div>
         <div id="time"></div>
       </div>
     </div>

@@ -22,6 +22,8 @@ function initialize_blacklist(){
 
 chrome.runtime.onInstalled.addListener(function initialization(){
   initialize_blacklist();
+  let time_setting={blocktime:0,timeon:false};
+  chrome.storage.sync.set({'time_setting': time_setting});
 });
 
 chrome.contextMenus.onClicked.addListener(function(info,tab){

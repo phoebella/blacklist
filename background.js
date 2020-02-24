@@ -13,7 +13,7 @@ chrome.contextMenus.create({
 });
 
 function initialize_blacklist(){
-  let blacklist=["www.youtube.com"];
+  let blacklist=["www.facebook.com"];
   chrome.storage.sync.set({'blacklist':blacklist}, function(){
     console.log("blacklist initialized");
   });

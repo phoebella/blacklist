@@ -9,7 +9,7 @@ A chrome extension designed to help users who would like to keep focused on thei
 Download the directory, then go to chrome://extensions/ and click the Load unpacked extension, then select directory 'Blacklist'.
 
 ## Guid to use
-- If user would like to add current webpage into blacklist, click 'add to blacklist' in context menu would block visit to all websites with current domain name.
+- If user would like to add current webpage into blacklist, click lock icon or click 'add to blacklist' in context menu would block visit to all websites with current domain name.
 - If user would like to see the whole blacklist, click 'see blacklist' in context menu. 
 - By default, youtube is on the blacklist, user could also edit the blacklist by clicking 'add' or 'delete' button.
 - After setting up the blacklist, you can set the period of time you would like to block the websites on the blacklist.

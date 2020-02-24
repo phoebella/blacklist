@@ -26,6 +26,18 @@ chrome.runtime.onInstalled.addListener(function initialization(){
   chrome.storage.sync.set({'time_setting': time_setting});
 });
 
+
+chrome.browserAction.onClicked.addListener(function (){
+  chrome.tabs.query({active: true, currentWindow: true}, function(mytab) {
+    let url = mytab.map(x => x.url);
+    var parser = document.createElement('a');
+    parser.href = url[0];
+    console.log("url added "+parser.hostname);
+    add_url_to_table(parser.hostname);
+    alert(parser.hostname+' added to blacklist');
+  });
+});
+
 chrome.contextMenus.onClicked.addListener(function(info,tab){
   console.log("clicked");
   switch(info.menuItemId) {

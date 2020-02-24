@@ -168,7 +168,7 @@ function write_timer(){
     console.log("in writer");
     console.log(data.time_setting.timeon);
     if(data.time_setting.timeon==true){
-      close_tab();
+      //close_tab();
       let start_btn = document.getElementById('start');
       let text = document.getElementById('set_time');
       start_btn.disabled = true;
@@ -187,6 +187,7 @@ function update_time(){
     let cur_time = new Date().getTime();
     let time_left = data.time_setting.blocktime-cur_time;
     if(time_left>0){
+      close_tab();
       let hours = Math.floor((time_left / (1000 * 60 * 60)) % 24);
       let minutes = Math.floor((time_left / (1000 * 60)) % 60);
       let seconds = Math.floor((time_left / 1000) % 60);

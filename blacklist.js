@@ -158,9 +158,6 @@ function turn_timer_on(){
         write_timer();
       });
   });
-
-  //console.log("today is " + today);
-
 }
 
 var update;
@@ -229,7 +226,7 @@ function close_tab(){
 					if (tab.url.includes(site)) {
             console.log("tab is " + tab.url);
             chrome.tabs.executeScript(tab.id, {
-				        code: 'interval = setInterval(function(){alert("you are not allowed to visit this website")},2000)'
+				        code: 'interval = setInterval(function(){alert("stay focused!")},2000)'
               });
 					}
 				});

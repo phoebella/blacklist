@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "name": "site blocker",
+  "name": "blacklist",
   "description": "An extension that block sites for a period of time set by user",
   "version": "1.0",
   "icons": {

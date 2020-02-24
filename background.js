@@ -30,8 +30,33 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
   console.log("clicked");
   switch(info.menuItemId) {
     case "extensionsee":
+      console.log("seeing");
       chrome.tabs.create({url: '/blacklist.html'});
       console.log("blacklist created");
       break;
+    case "extensionadd":
+      console.log("added url");
+      chrome.tabs.query({active: true, currentWindow: true}, function(mytab) {
+        let url = mytab.map(x => x.url);
+        var parser = document.createElement('a');
+        parser.href = url[0];
+        console.log("url added "+parser.hostname);
+        add_url_to_table(parser.hostname);
+        alert(parser.hostname+' added to blacklist');
+      });
+      break;
+
+
   }
 });
+
+
+
+function add_url_to_table(url){
+  console.log("url is " + url);
+  chrome.storage.sync.get('blacklist', function (data){
+      let myblacklist = document.getElementById('blacklist');
+      data.blacklist.push(url);
+      chrome.storage.sync.set({'blacklist': data.blacklist});
+});
+}

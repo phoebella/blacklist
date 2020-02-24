@@ -12,6 +12,7 @@
     "persistent": false
   },
 
+
   "browser_action": {
     "default_icon": "images/lock16.png"
   },
@@ -21,6 +22,9 @@
   "permissions": [
     "storage",
 	  "tabs",
-	  "contextMenus"
+	  "contextMenus",
+    "<all_urls>",
+    "activeTab"
+
    ]
 }

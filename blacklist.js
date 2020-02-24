@@ -50,6 +50,7 @@ function drawtable(last,callback){
 
 
 function add_url_to_table(url){
+  console.log("url is " + url);
   chrome.storage.sync.get('blacklist', function (data){
     try{
       let myblacklist = document.getElementById('blacklist');
@@ -108,10 +109,12 @@ function delete_listener(){
 
 function add_listener(){
   let add = document.getElementById('add');
-  add.addEventListener('click',function(){
-    console.log("drawtable true");
-    drawtable(true,delete_listener);
-  });
+  if(add){
+    add.addEventListener('click',function(){
+      console.log("drawtable true");
+      drawtable(true,delete_listener);
+    });
+  }
 }
 
 
@@ -130,7 +133,6 @@ function time_listener(){
   });
   text.addEventListener("keyup",function(event){
     event.preventDefault();
-    //alert('keycode is ' + event.keyCode);
     if(event.keyCode==13){
       turn_timer_on();
     }
@@ -166,6 +168,7 @@ function write_timer(){
     console.log("in writer");
     console.log(data.time_setting.timeon);
     if(data.time_setting.timeon==true){
+      close_tab();
       let start_btn = document.getElementById('start');
       let text = document.getElementById('set_time');
       start_btn.disabled = true;
@@ -174,6 +177,9 @@ function write_timer(){
     update = setInterval(update_time,1000);
   });
 }
+
+
+var interval;
 
 
 function update_time(){
@@ -194,17 +200,12 @@ function update_time(){
     } else {
       console.log("time_left<0");
       clearInterval(update);
+      clearInterval(interval);
       let btn = document.createElement('button');
       btn.className = "pass";
       btn.innerHTML = '<i class="fa fa-check-circle"></i>';
       document.getElementById("num_display").innerHTML = " time's up, all sites unblocked";
       document.getElementById("num_display").appendChild(btn);
-      //document.getElementById("num_display").style.color= "#6a8caf";
-
-
-
-
-
       let start_btn = document.getElementById('start');
       let text = document.getElementById('set_time');
       start_btn.disabled = false;
@@ -213,4 +214,23 @@ function update_time(){
       chrome.storage.sync.set({'time_setting': time_setting});
     }
   });
+}
+
+
+
+function close_tab(){
+	chrome.storage.sync.get('blacklist', function (data) {
+		chrome.tabs.query({}, function(tabs){
+			tabs.forEach(function(tab){
+				data.blacklist.forEach(function (site) {
+					if (tab.url.includes(site)) {
+            console.log("tab is " + tab.url);
+            chrome.tabs.executeScript(tab.id, {
+				        code: 'interval = setInterval(function(){alert("you are not allowed to visit this website")},2000)'
+              });
+					}
+				});
+			});
+		});
+	});
 }

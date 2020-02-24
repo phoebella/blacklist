@@ -54,7 +54,8 @@ function add_url_to_table(url){
   chrome.storage.sync.get('blacklist', function (data){
     try{
       let myblacklist = document.getElementById('blacklist');
-      data.blacklist.push(url);
+      if(!myblacklist.includes(url)){
+        data.blacklist.push(url);
       chrome.storage.sync.set({'blacklist': data.blacklist}, function (){
 
         let tr = myblacklist.insertRow();
@@ -72,6 +73,7 @@ function add_url_to_table(url){
         td2.appendChild(btn);
         delete_listener();
     });
+  }
     }catch(err){
       console.log("url doesn't exist err "+"row is " +row_num);
     }

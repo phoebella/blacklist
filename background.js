@@ -34,7 +34,7 @@ chrome.browserAction.onClicked.addListener(function (){
     parser.href = url[0];
     console.log("url added "+parser.hostname);
     add_url_to_table(parser.hostname);
-    alert(parser.hostname+' added to blacklist');
+  //  alert(parser.hostname+' added to blacklist');
   });
 });
 
@@ -54,7 +54,7 @@ chrome.contextMenus.onClicked.addListener(function(info,tab){
         parser.href = url[0];
         console.log("url added "+parser.hostname);
         add_url_to_table(parser.hostname);
-        alert(parser.hostname+' added to blacklist');
+        //alert(parser.hostname+' added to blacklist');
       });
       break;
 
@@ -68,7 +68,12 @@ function add_url_to_table(url){
   console.log("url is " + url);
   chrome.storage.sync.get('blacklist', function (data){
       let myblacklist = document.getElementById('blacklist');
-      data.blacklist.push(url);
-      chrome.storage.sync.set({'blacklist': data.blacklist});
+      if(!data.blacklist.includes(url)){
+        data.blacklist.push(url);
+        chrome.storage.sync.set({'blacklist': data.blacklist});
+        alert(url+' added to blacklist');
+      } else {
+        alert(url+' has been added to blacklist');
+      }
 });
 }
